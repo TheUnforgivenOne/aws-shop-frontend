@@ -11,7 +11,9 @@ type CSVFileImportProps = {
 axios.interceptors.response.use(
   (res) => res,
   (e) => {
-    alert(`Error ${e.response?.status}: ${e.response?.data?.message}`);
+    if (e.response.status) {
+      alert(`Error ${e.response?.status}: ${e.response?.data?.message}`);
+    }
     return Promise.reject(e);
   }
 );
