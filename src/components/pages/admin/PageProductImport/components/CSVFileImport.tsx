@@ -8,6 +8,16 @@ type CSVFileImportProps = {
   title: string;
 };
 
+axios.interceptors.response.use(
+  (res) => res,
+  (e) => {
+    if (e.response.status) {
+      alert(`Error ${e.response?.status}: ${e.response?.data?.message}`);
+    }
+    return Promise.reject(e);
+  }
+);
+
 export default function CSVFileImport({ url, title }: CSVFileImportProps) {
   const [file, setFile] = React.useState<File>();
 
@@ -26,6 +36,12 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
   const uploadFile = async () => {
     console.log("uploadFile to", url);
 
+    const headers = {};
+    const token = localStorage.getItem("authorization_token");
+    if (token) {
+      Object.assign(headers, { Authorization: `Basic ${token}` });
+    }
+
     // Get the presigned URL
     if (file) {
       const response = await axios({
@@ -34,6 +50,7 @@ export default function CSVFileImport({ url, title }: CSVFileImportProps) {
         params: {
           name: encodeURIComponent(file.name),
         },
+        headers,
       });
       console.log("File to upload: ", file.name);
       console.log("Uploading to: ", response.data?.signedUrl);
