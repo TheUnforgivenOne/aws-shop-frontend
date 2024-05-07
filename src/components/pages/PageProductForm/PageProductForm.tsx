@@ -13,7 +13,7 @@ import {
   useUpsertAvailableProduct,
 } from "~/queries/products";
 
-const initialValues: AvailableProduct = AvailableProductSchema.cast({});
+const initialValues = AvailableProductSchema.cast({});
 
 export default function PageProductForm() {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function PageProductForm() {
           id,
         }
       : formattedValues;
-    return upsertAvailableProduct(productToSave, {
+    return upsertAvailableProduct(productToSave as any, {
       onSuccess: () => {
         invalidateAvailableProducts();
         removeProductCache(id);
@@ -48,7 +48,7 @@ export default function PageProductForm() {
         <>Loading...</>
       ) : (
         <Formik
-          initialValues={data ?? initialValues}
+          initialValues={data ?? (initialValues as any)}
           validationSchema={AvailableProductSchema}
           onSubmit={onSubmit}
         >
