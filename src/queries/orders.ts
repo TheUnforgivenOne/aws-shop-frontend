@@ -34,12 +34,16 @@ export function useUpdateOrderStatus() {
 }
 
 export function useSubmitOrder() {
-  return useMutation((values: Omit<Order, "id">) => {
-    return axios.put<Omit<Order, "id">>(`${API_PATHS.order}/order`, values, {
-      headers: {
-        Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
-      },
-    });
+  return useMutation(() => {
+    return axios.post(
+      `${API_PATHS.order}/api/profile/cart/checkout`,
+      {},
+      {
+        headers: {
+          Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
+        },
+      }
+    );
   });
 }
 
